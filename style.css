@@ -1,0 +1,54 @@
+:root{
+  --mainColor: rgba(67, 67, 173, 0.529);
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: rgb(235, 233, 233);
+}
+
+#head1 {
+    text-align: center;
+    background-color: var(--mainColor);
+    width: 100%;
+    height: 50px;
+    padding-top: 15px;
+}
+
+.input{
+  border-radius: 15px ;
+  background-color: white;
+  width: 90%;
+  height: em;
+  padding: 20px;
+  margin: 50px;
+}
+
+.input-custom{
+  width: 30px;       /* Chiều rộng của hộp input */
+  height: 10px;      /* Chiều cao của hộp input */
+  padding: 5px;      /* Khoảng cách giữa nội dung và viền của hộp input */
+}
+
+#tableInput{
+  border-collapse: collapse;
+}
+#tableInput th,#tableInput td {
+  border: 1px solid black;
+  padding: 8px;
+}
+
+#submit{
+  background-color: var(--mainColor) ;
+  border-radius: 5px ;
+  border: white;
+  width: 80px;
+  height: 40px;
+}
+
+.output{
+  border-radius: 15px ;
+  background-color: white;
+  width: 90%;
+  padding: 20px;
+  margin: 50px;
+}
