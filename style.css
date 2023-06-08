@@ -25,7 +25,7 @@ body {
 }
 
 .inputcell{
-  width: 30px;       /* Chiều rộng của hộp input */
+  width: 40px;       /* Chiều rộng của hộp input */
   height: 10px;      /* Chiều cao của hộp input */
   padding: 5px;      /* Khoảng cách giữa nội dung và viền của hộp input */
 }
