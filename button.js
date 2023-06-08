@@ -10,8 +10,8 @@ addTaskBtn.addEventListener("click", function() {
     for (let i = 0; i < rowCount; i++) {
         const cell = document.createElement(i == 0 ? "th" : "td");
         const input = document.createElement("input");
-        input.type = "int";
-        input.style.width = "30px";
+        input.type = "number";
+        input.style.width = "40px";
         input.style.height = "10px";
         input.style.padding = "5px";
         input.className = "inputcell";
@@ -27,8 +27,8 @@ addTaskBtn.addEventListener("click", function() {
     for (let i = 0; i < rowCount; i++) {
         const cell = document.createElement(i == 0 ? "th" : "td");
         const input = document.createElement("input");
-        input.type = "int";
-        input.style.width = "30px";
+        input.type = "number";
+        input.style.width = "40px";
         input.style.height = "10px";
         input.style.padding = "5px";
         input.className = "inputcell";
@@ -49,8 +49,8 @@ addProcessBtn.addEventListener("click", function() {
 
     for (let i = 0; i < columnCount; i++) {
         const input = document.createElement("input");
-        input.type = "int";
-        input.style.width = "30px";
+        input.type = "number";
+        input.style.width = "40px";
         input.style.height = "10px";
         input.style.padding = "5px";
         input.className = "inputcell";
