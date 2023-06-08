@@ -21,9 +21,10 @@ body {
   height: em;
   padding: 20px;
   margin: 50px;
+  overflow: auto;
 }
 
-.input-custom{
+.inputcell{
   width: 30px;       /* Chiều rộng của hộp input */
   height: 10px;      /* Chiều cao của hộp input */
   padding: 5px;      /* Khoảng cách giữa nội dung và viền của hộp input */
