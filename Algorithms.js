@@ -5,6 +5,7 @@ class Process {
       this.cpuBurstTimes = cpuBurstTimes;
       this.ioTimes = ioTimes;
       this.currentCpu = cpuBurstTimes.shift();
+      this.pushedReady_Time = arrivalTime;
     }
 }
 let processes = [];
@@ -23,10 +24,13 @@ function getData() {
       let ioTimes = [];
 
       for (let j = 1; j <= columnCount-2; j++) {
-        if (j % 2 !== 0) {
-          cpuBurstTimes.push(inputs[j+(i-1)*(columnCount-1)].value);
-        } else {
-          ioTimes.push(inputs[j+(i-1)*(columnCount-1)].value);
+        let temp = inputs[j+(i-1)*(columnCount-1)].value;
+        if(temp > 0){
+          if (j % 2 !== 0) {
+              cpuBurstTimes.push(temp);
+          } else {
+            ioTimes.push(temp);
+          }
         }
       }
   
@@ -43,7 +47,7 @@ function setOutputForm(sumOfTime) {
   let th = document.createElement("th");
   headerRow.appendChild(th);
 
-  for(let i = 0; i < sumOfTime - 1; i++){
+  for(let i = 0; i < sumOfTime; i++){
     let th = document.createElement("th");
     th.textContent = i;
     headerRow.appendChild(th);
@@ -71,6 +75,8 @@ function setOutputForm(sumOfTime) {
         if(j == 0){
           cell.textContent = "I/O"+(i+1);
         }
+        if(i == processCount - 1)
+          cell.style.borderBottom = "1px solid black";
         row.appendChild(cell);
     }
     table.appendChild(row);
@@ -107,10 +113,13 @@ function pushReadyQueue(readyQueue,arrivalTime,processes){
 
 function checkCurrentCPU_toPush(process,currentProcess){
   if(process.currentCpu == 0){
+    let row = Outputtable.rows;
+    row[currentProcess+sumOfProcess].cells[currentTime+1].textContent ="|";
     waitingQueues[currentProcess - 1] = process.ioTimes.shift();
     process.currentCpu = process.cpuBurstTimes.shift();
     tempProcess[currentProcess - 1] = process;
   }else{
+    process.pushedReady_Time = currentTime;
     readyQueue.push(process);
   }
 }
@@ -131,8 +140,10 @@ function runIO(){
   for(let i = 0; i < sumOfProcess ; i++){
     if(waitingQueues[i] != null){
       waitingQueues[i]--;
-      row[i+1+sumOfProcess].cells[currentTime+1].textContent ="─────";
+      row[i+1+sumOfProcess].cells[currentTime+1].textContent +="─────";
       if(waitingQueues[i]== 0){
+        row[i+1+sumOfProcess].cells[currentTime+1].textContent +="|";
+        tempProcess[i].pushReadyQueue = currentTime;
         readyQueue.push(tempProcess[i]);
         waitingQueues[i] = null;
       }
@@ -175,6 +186,19 @@ function printOutReadyQueue(){
   }
 }
 
+// function perform_WaitingTime(process,currentProcess){
+//   let outputProcessRow = Outputtable.rows[currentProcess];
+//   if(process.pushedReady_Time < currentTime){
+//     for(let i = process.pushedReady_Time; i < currentTime; i++){
+//       console.log(i);
+//       console.log(currentTime);
+//       if(i == process.pushedReady_Time)
+//         outputProcessRow.cells[i+1].textContent = "|";
+//       outputProcessRow.cells[i+1].textContent += "-----";
+//     }
+//   }
+// }
+
 let Outputtable = document.getElementById("tableOutput");
 let readyQueue = [];
 let waitingQueues = [];
@@ -192,15 +216,14 @@ function roundRobin(timeQuantum) {
   while (readyQueue.length > 0 ||  waitingQueues.some(Element => Element !== null)) {
     printOutReadyQueue();
     if(readyQueue.length > 0){
-      printOutReadyQueue();
       let rows = Outputtable.rows; 
       rows[1+sumOfProcess*2].cells[currentTime+1].style.color ="red";
       let process = readyQueue.shift();
       let currentProcess = getProcessIndex(process);
+      // perform_WaitingTime(process,currentProcess);
       // Thực thi CPU
       let cpuBursting = Math.min(timeQuantum,process.currentCpu);
       runCPU(cpuBursting,currentProcess,process);
-
       // Kiểm tra tiến trình đã hoàn thành hay chưa
       if(checkCompletedProcess(process,currentProcess))
         continue;
@@ -224,6 +247,6 @@ solveBtn.addEventListener('click', function() {
   getData();
   sumOfProcess = processes.length; 
   processesCopy = [...processes];
-  setOutputForm(20);
-  roundRobin(2);
+  setOutputForm(35);
+  roundRobin(5);
 });
