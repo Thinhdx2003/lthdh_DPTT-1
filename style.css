@@ -25,13 +25,14 @@ body {
 }
 
 .inputcell{
-  width: 40px;       /* Chiều rộng của hộp input */
-  height: 10px;      /* Chiều cao của hộp input */
-  padding: 5px;      /* Khoảng cách giữa nội dung và viền của hộp input */
+  width: 40px;       
+  height: 10px;      
+  padding: 5px;     
 }
 
 #tableInput{
   border-collapse: collapse;
+  table-layout: fixed;
 }
 #tableInput th,#tableInput td {
   border: 1px solid black;
@@ -46,10 +47,29 @@ body {
   height: 40px;
 }
 
-.output{
+#output{
   border-radius: 15px ;
   background-color: white;
   width: 90%;
   padding: 20px;
   margin: 50px;
+  overflow-y: scroll;
+}
+
+#tableOutput th{
+  border: 1px solid black;
+  width: 50px;       
+  height: 30px;     
+  text-align: left;
+  white-space: nowrap;
+}
+#tableOutput td{
+  width: 50px;       
+  height: 30px;     
+  text-align: left;
+  white-space: nowrap;
+}
+#tableOutput{
+  border-collapse: collapse;
+  overflow: auto;
 }
