@@ -186,18 +186,19 @@ function printOutReadyQueue(){
   }
 }
 
-// function perform_WaitingTime(process,currentProcess){
-//   let outputProcessRow = Outputtable.rows[currentProcess];
-//   if(process.pushedReady_Time < currentTime){
-//     for(let i = process.pushedReady_Time; i < currentTime; i++){
-//       console.log(i);
-//       console.log(currentTime);
-//       if(i == process.pushedReady_Time)
-//         outputProcessRow.cells[i+1].textContent = "|";
-//       outputProcessRow.cells[i+1].textContent += "-----";
-//     }
-//   }
-// }
+function perform_WaitingTime(process,currentProcess){
+  let Row = Outputtable.rows;
+  let PR_Time = parseInt(process.pushedReady_Time);
+  if(PR_Time < currentTime){
+    for(let i = PR_Time; i < currentTime; i++){
+      if(!Row[currentProcess].cells[i+1].textContent.includes("─────") && !Row[currentProcess+sumOfProcess].cells[i+1].textContent.includes("─────")){
+        Row[currentProcess].cells[i+1].textContent = "!!!!!!!!!!!";
+        Row[currentProcess].cells[i+1].style.color = "rgba(67, 67, 173, 1)";
+        Row[currentProcess].cells[i+1].style.fontWeight = "700";
+      }
+    }
+  }
+}
 
 let Outputtable = document.getElementById("tableOutput");
 let readyQueue = [];
@@ -220,7 +221,7 @@ function roundRobin(timeQuantum) {
       rows[1+sumOfProcess*2].cells[currentTime+1].style.color ="red";
       let process = readyQueue.shift();
       let currentProcess = getProcessIndex(process);
-      // perform_WaitingTime(process,currentProcess);
+      perform_WaitingTime(process,currentProcess);
       // Thực thi CPU
       let cpuBursting = Math.min(timeQuantum,process.currentCpu);
       runCPU(cpuBursting,currentProcess,process);
@@ -244,9 +245,11 @@ function roundRobin(timeQuantum) {
 }
 let solveBtn = document.getElementById('solve');
 solveBtn.addEventListener('click', function() {
+  const algotithm = document.getElementById("Algorithms").value;
+  console.log(algotithm);
   getData();
   sumOfProcess = processes.length; 
   processesCopy = [...processes];
   setOutputForm(35);
-  roundRobin(5);
+  roundRobin(2);
 });
