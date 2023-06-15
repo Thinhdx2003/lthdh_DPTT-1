@@ -6,10 +6,24 @@ class Process {
       this.ioTimes = ioTimes;
       this.currentCpu = cpuBurstTimes.shift();
       this.pushedReady_Time = arrivalTime;
+      this.responseTime = 0;
+      this.waitingTime = 0;
+      this.TurnAroundTime = 0;
     }
 }
+
 let processes = [];
+let Outputtable = document.getElementById("tableOutput");
+let timeCoutTable = document.getElementById("timeCoutTable");
+let readyQueue = [];
+let waitingQueues = [];
+let sumOfProcess; 
+let currentTime;
+let processesCopy; 
+let tempProcess = [];
+
 function getData() {
+    let processes = [];
     let processTable = document.getElementById('tableInput');
     let rows = processTable.getElementsByTagName('tr');
     let rowsLength = rows.length;
@@ -37,12 +51,16 @@ function getData() {
       let process = new Process(name, arrivalTime, cpuBurstTimes, ioTimes);
       processes.push(process);
     }
+    return processes;
 }
 
 function setOutputForm(sumOfTime) {
+  //resetTable
+  Outputtable.innerHTML = '';
+  timeCoutTable.innerHTML = '';
+
   let tableInput = document.getElementById("tableInput");
   let processCount = tableInput.rows.length - 1;
-  let table = document.getElementById("tableOutput");
   let headerRow = document.createElement("tr");
   let th = document.createElement("th");
   headerRow.appendChild(th);
@@ -52,7 +70,7 @@ function setOutputForm(sumOfTime) {
     th.textContent = i;
     headerRow.appendChild(th);
   }
-  table.appendChild(headerRow);
+  Outputtable.appendChild(headerRow);
   for(let i = 0; i < processCount; i++){
     let row = document.createElement("tr");
     for(let j = 0; j<= sumOfTime; j++){
@@ -65,7 +83,7 @@ function setOutputForm(sumOfTime) {
           cell.style.borderBottom = "1px solid black";
         row.appendChild(cell);
     }
-    table.appendChild(row);
+    Outputtable.appendChild(row);
   }
   for(let i = 0; i < processCount; i++){
     let row = document.createElement("tr");
@@ -79,19 +97,29 @@ function setOutputForm(sumOfTime) {
           cell.style.borderBottom = "1px solid black";
         row.appendChild(cell);
     }
-    table.appendChild(row);
+    Outputtable.appendChild(row);
   }
   for(let i = 0; i < processCount; i++){
     let row = document.createElement("tr");
     for(let j = 0; j<= sumOfTime; j++){
         let cell = document.createElement("td");
-        cell.className = "outputCell";
+        cell.className = "readyCell";
         if(j == 0 && i == 0){
           cell.textContent = "Ready";
         }
         row.appendChild(cell);
     }
-    table.appendChild(row);
+    Outputtable.appendChild(row);
+  }
+  //bảng tính time
+  for(let i = 0; i <= processCount; i++){
+    let row = document.createElement("tr");
+    for(let j = 0; j<3; j++){
+        let cell = document.createElement("td");
+        cell.className = "outputCell";
+        row.appendChild(cell);
+    }
+    timeCoutTable.appendChild(row);
   }
 }
 
@@ -140,10 +168,10 @@ function runIO(){
   for(let i = 0; i < sumOfProcess ; i++){
     if(waitingQueues[i] != null){
       waitingQueues[i]--;
-      row[i+1+sumOfProcess].cells[currentTime+1].textContent +="─────";
+      row[i+1+sumOfProcess].cells[currentTime+1].textContent +="────";
       if(waitingQueues[i]== 0){
         row[i+1+sumOfProcess].cells[currentTime+1].textContent +="|";
-        tempProcess[i].pushReadyQueue = currentTime;
+        tempProcess[i].pushedReady_Time = currentTime+1;
         readyQueue.push(tempProcess[i]);
         waitingQueues[i] = null;
       }
@@ -156,13 +184,13 @@ function runCPU(cpuBursting,currentProcess,process){
   for(let i = 1; i <= cpuBursting; i++){
     if(i == 1)
       outputProcessRow.cells[currentTime+1].textContent = "|";
-    outputProcessRow.cells[currentTime+1].textContent +="─────";
+    outputProcessRow.cells[currentTime+1].textContent +="────";
     process.currentCpu--;
     //Kiểm tra tiến độ I/O của mỗi process qua mỗi lần Time tăng
     runIO();
     currentTime++;
     //Check queue chưa vào
-    if(processes.length>0)
+    if(processesCopy.length>0)
       pushReadyQueue(readyQueue,currentTime,processesCopy);
     printOutReadyQueue();
   }
@@ -173,6 +201,7 @@ function checkCompletedProcess(process,currentProcess){
   let outputProcessRow = Outputtable.rows[currentProcess];
   if (process.cpuBurstTimes.length == 0 && process.currentCpu == 0) {
     outputProcessRow.cells[currentTime+1].textContent="X";
+    process.TurnAroundTime = currentTime - process.arrivalTime;
     return 1;
   }
   return 0;
@@ -190,23 +219,63 @@ function perform_WaitingTime(process,currentProcess){
   let Row = Outputtable.rows;
   let PR_Time = parseInt(process.pushedReady_Time);
   if(PR_Time < currentTime){
+    if(PR_Time == process.arrivalTime){
+      process.responseTime = currentTime - PR_Time;
+      console.log(process.responseTime);
+    }
+    process.waitingTime += currentTime - PR_Time;
     for(let i = PR_Time; i < currentTime; i++){
-      if(!Row[currentProcess].cells[i+1].textContent.includes("─────") && !Row[currentProcess+sumOfProcess].cells[i+1].textContent.includes("─────")){
-        Row[currentProcess].cells[i+1].textContent = "!!!!!!!!!!!";
+        Row[currentProcess].cells[i+1].textContent = "!!!!!!!!";
         Row[currentProcess].cells[i+1].style.color = "rgba(67, 67, 173, 1)";
-        Row[currentProcess].cells[i+1].style.fontWeight = "700";
-      }
+        Row[currentProcess].cells[i+1].style.fontWeight = "700"; 
     }
   }
 }
 
-let Outputtable = document.getElementById("tableOutput");
-let readyQueue = [];
-let waitingQueues = [];
-let sumOfProcess; 
-let currentTime;
-let processesCopy; 
-let tempProcess = [];
+function calculateAverage(array) {
+  if (array.length === 0) {
+    return 0;
+  }
+
+  const sum = array.reduce((acc, num) => acc + num, 0);
+  const average = sum / array.length;
+  return average.toFixed(2);
+}
+
+function printOutTimeCoutTable(){
+  let row;
+  for(let i = 0; i < sumOfProcess; i++){
+    row = timeCoutTable.rows[i];
+    for(let j = 0; j < 3; j++){
+      switch(j){
+        case 0: 
+          row.cells[j].textContent = "R"+(i+1)+" = "+ processes[i].responseTime;
+          break;
+        case 1:
+          row.cells[j].textContent = "W"+(i+1)+" = "+ processes[i].waitingTime;
+          break;
+        case 2:
+          row.cells[j].textContent = "T"+(i+1)+" = "+ processes[i].TurnAroundTime;
+          break;
+      }
+    }
+  }
+  row = timeCoutTable.rows[3];
+  for(let j = 0; j < 3; j++){
+    switch(j){
+      case 0: 
+        row.cells[j].textContent = "Rtb = "+ calculateAverage(processes.map(process => process.responseTime));
+        break;
+      case 1:
+        row.cells[j].textContent = "Wtb = "+ calculateAverage(processes.map(process => process.waitingTime));
+        break;
+      case 2:
+        row.cells[j].textContent = "Ttb = "+ calculateAverage(processes.map(process => process.TurnAroundTime));
+        break;
+    }
+  }
+}
+
 function roundRobin(timeQuantum) {
   //Khởi tạo ready queue
   let minArvTime = Math.min(...processes.map(process => process.arrivalTime));
@@ -236,20 +305,63 @@ function roundRobin(timeQuantum) {
         runIO();
         currentTime++;
         //Check queue chưa vào
-        if(processes.length>0)
+        if(processesCopy.length>0)
           pushReadyQueue(readyQueue,currentTime,processesCopy);
         printOutReadyQueue();
       }
     }
   }
 }
+
+//Xử lý nút
+const algorithm = document.getElementById("Algorithms");
+
+algorithm.addEventListener("change", function() {
+  const selectedOption = algorithm.options[algorithm.selectedIndex];
+  const selectedValue = selectedOption.value;
+  let q = document.getElementById("quantum");
+  switch (selectedValue) {
+    case "4":{
+      q.style.display = "block";
+      break;
+    }
+  }
+});
+
+function deleteColumn(columnIndex) {
+  let table = document.getElementById("tableOutput"); 
+  let rowsLength = table.rows.length;
+  for (let i = 0; i < rowsLength; i++) {
+    let row = table.rows[i];
+    row.deleteCell(columnIndex);
+  }
+}
+
 let solveBtn = document.getElementById('solve');
 solveBtn.addEventListener('click', function() {
-  const algotithm = document.getElementById("Algorithms").value;
-  console.log(algotithm);
-  getData();
+  //reset output
+  // let outputTable = document.getElementById("tableOutput");
+  // outputTable.innerHTML = '';
+  //khởi tạo cho thuật toán mới
+  currentTime = 0;
+  Outputtable = document.getElementById("tableOutput");
+  processes = getData();
   sumOfProcess = processes.length; 
   processesCopy = [...processes];
-  setOutputForm(35);
-  roundRobin(2);
+  setOutputForm(100);
+  const selectedOption = algorithm.options[algorithm.selectedIndex];
+  const selectedValue = selectedOption.value;
+  switch (selectedValue) {
+    case "4":{
+      const q = document.getElementById("quantum").value;
+      roundRobin(q);
+      break;
+    }
+  } 
+  //xóa cột thừa của Output table
+  let startDeleteColumn = currentTime+2;
+  for(let i = 100; i>= startDeleteColumn; i--){
+    deleteColumn(i);
+  }
+  printOutTimeCoutTable();
 });

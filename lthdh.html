@@ -6,13 +6,13 @@
 </head>
 <body>
   <h1 id="head1">Process Scheduling Algorithms</h1>
-  <div class ="input">
+  <div id ="input" >
     <h1>Input</h1>
     Algorithms <select id="Algorithms">
-      <option>FCFS</option>
-      <option>SJF</option>
-      <option>SRTF</option>
-      <option>RR</option>
+      <option value="1">FCFS</option>
+      <option value="2">SJF</option>
+      <option value="3">SRTF</option>
+      <option value="4">RR</option>
     </select>
     &nbsp;&nbsp;<button id = "addProcess">Add new Process</button>
     &nbsp;&nbsp;<button id = "addTask">Add Task</button>
@@ -74,10 +74,15 @@
     </table>
     <br>
     <button id="solve">Solve</button>
+    <br><br>
+    <input type="number" placeholder="quantum" id="quantum">
   </div>
   <div id ="output" >
     <h1>Output</h1>
     <table id = "tableOutput">
+    </table>
+    <br><br>
+    <table id = "timeCoutTable">
     </table>
   </div>
   <script src="button.js"></script>
