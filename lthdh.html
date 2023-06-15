@@ -1,91 +1,96 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Process Scheduling Algorithms</title>
-  <link rel="stylesheet" href="style.css">
+    <title>Process Scheduling Algorithms</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <h1 id="head1">Process Scheduling Algorithms</h1>
-  <div id ="input" >
-    <h1>Input</h1>
-    Algorithms <select id="Algorithms">
-      <option value="1">FCFS</option>
-      <option value="2">SJF</option>
-      <option value="3">SRTF</option>
-      <option value="4">RR</option>
-    </select>
-    &nbsp;&nbsp;<button id = "addProcess">Add new Process</button>
-    &nbsp;&nbsp;<button id = "addTask">Add Task</button>
-    &nbsp;&nbsp;<button id = "clear">Clear</button>
-    <br><br>
-    <table id = "tableInput">
-      <tr>
-        <th>Process</th>
-        <th>Arrival</th>
-        <th>CPU</th>
-        <th>I/O</th>
-        <th>CPU</th>
-        <th>I/O</th>
-        <th>CPU</th>
-        <th>I/O</th>
-        <th>CPU</th>
-        <th>I/O</th>
-        <th>CPU</th>
-      </tr>
-      <tr>
-        <th>P1</th>
-        <td><input class="inputcell" type="number" value="0"></td>
-        <td><input class="inputcell" type="number" value="1"></td>
-        <td><input class="inputcell" type="number" value="4"></td>
-        <td><input class="inputcell" type="number" value="1"></td>
-        <td><input class="inputcell" type="number" value="4"></td>
-        <td><input class="inputcell" type="number" value="1"></td>
-        <td><input class="inputcell" type="number" value="4"></td>
-        <td><input class="inputcell" type="number" value="1"></td>
-        <td><input class="inputcell" type="number" value="4"></td>
-        <td><input class="inputcell" type="number" value="1"></td>
-      </tr>
-      <tr>
-        <th>P2</th>
-        <td><input class="inputcell" type="number" value="0"></td>
-        <td><input class="inputcell" type="number" value="2"></td>
-        <td><input class="inputcell" type="number" value="7"></td>
-        <td><input class="inputcell" type="number" value="2"></td>
-        <td><input class="inputcell" type="number" value="7"></td>
-        <td><input class="inputcell" type="number" value="3"></td>
-        <td><input class="inputcell" type="number"></td>
-        <td><input class="inputcell" type="number"></td>
-        <td><input class="inputcell" type="number"></td>
-        <td><input class="inputcell" type="number"></td>
-      </tr>
-      <tr>
-        <th>P3</th>
-        <td><input class="inputcell" type="number" value="0"></td>
-        <td><input class="inputcell" type="number" value="13"></td>
-        <td><input class="inputcell" type="number" value="6"></td>
-        <td><input class="inputcell" type="number" value="2"></td>
-        <td><input class="inputcell" type="number"></td>
-        <td><input class="inputcell" type="number"></td>
-        <td><input class="inputcell" type="number"></td>
-        <td><input class="inputcell" type="number"></td>
-        <td><input class="inputcell" type="number"></td>
-        <td><input class="inputcell" type="number"></td>
-      </tr>
-    </table>
-    <br>
-    <button id="solve">Solve</button>
-    <br><br>
-    <input type="number" placeholder="quantum" id="quantum">
-  </div>
-  <div id ="output" >
-    <h1>Output</h1>
-    <table id = "tableOutput">
-    </table>
-    <br><br>
-    <table id = "timeCoutTable">
-    </table>
-  </div>
-  <script src="button.js"></script>
-  <script src="Algorithms.js"></script>
+    <h1 id="head1">Process Scheduling Algorithms</h1>
+    <div id="input">
+        <h1>Input</h1>
+        Algorithms <select id="Algorithms">
+            <option value="1">FCFS</option>
+            <option value="2">SJF</option>
+            <option value="3">SRTF</option>
+            <option value="4">RR</option>
+        </select>
+        &nbsp;&nbsp;<button id="addProcess">Add new Process</button>
+        &nbsp;&nbsp;<button id="addTask">Add Task</button>
+        &nbsp;&nbsp;<button id="removeProcess">Remove Process</button>
+        &nbsp;&nbsp;<button id="removeTask">Remove Task</button>
+        &nbsp;&nbsp;<button id="clear">Clear</button>
+        <br><br>
+        <table id="tableInput">
+            <tr>
+                <th>Process</th>
+                <th>Arrival</th>
+                <th>CPU</th>
+                <th>I/O</th>
+                <th>CPU</th>
+                <th>I/O</th>
+                <th>CPU</th>
+                <th>I/O</th>
+                <th>CPU</th>
+                <th>I/O</th>
+                <th>CPU</th>
+            </tr>
+            <tr>
+                <th>P1</th>
+                <td><input class="inputcell" type="number" value="0"></td>
+                <td><input class="inputcell" type="number" value="1"></td>
+                <td><input class="inputcell" type="number" value="4"></td>
+                <td><input class="inputcell" type="number" value="1"></td>
+                <td><input class="inputcell" type="number" value="4"></td>
+                <td><input class="inputcell" type="number" value="1"></td>
+                <td><input class="inputcell" type="number" value="4"></td>
+                <td><input class="inputcell" type="number" value="1"></td>
+                <td><input class="inputcell" type="number" value="4"></td>
+                <td><input class="inputcell" type="number" value="1"></td>
+            </tr>
+            <tr>
+                <th>P2</th>
+                <td><input class="inputcell" type="number" value="0"></td>
+                <td><input class="inputcell" type="number" value="2"></td>
+                <td><input class="inputcell" type="number" value="7"></td>
+                <td><input class="inputcell" type="number" value="2"></td>
+                <td><input class="inputcell" type="number" value="7"></td>
+                <td><input class="inputcell" type="number" value="3"></td>
+                <td><input class="inputcell" type="number"></td>
+                <td><input class="inputcell" type="number"></td>
+                <td><input class="inputcell" type="number"></td>
+                <td><input class="inputcell" type="number"></td>
+            </tr>
+            <tr>
+                <th>P3</th>
+                <td><input class="inputcell" type="number" value="0"></td>
+                <td><input class="inputcell" type="number" value="13"></td>
+                <td><input class="inputcell" type="number" value="6"></td>
+                <td><input class="inputcell" type="number" value="2"></td>
+                <td><input class="inputcell" type="number"></td>
+                <td><input class="inputcell" type="number"></td>
+                <td><input class="inputcell" type="number"></td>
+                <td><input class="inputcell" type="number"></td>
+                <td><input class="inputcell" type="number"></td>
+                <td><input class="inputcell" type="number"></td>
+            </tr>
+        </table>
+        <br>
+        <button id="solve">Solve</button>
+        <br><br>
+        <input type="number" placeholder="quantum" id="quantum">
+    </div>
+    <div id="output">
+        <h1>Output</h1>
+        <table id="tableOutput">
+        </table>
+        <br><br>
+        <table id="timeCoutTable">
+        </table>
+    </div>
+    <script src="button.js"></script>
+    <script src="Algorithms.js"></script>
 </body>
+
 </html>

@@ -1,6 +1,7 @@
-:root{
-  --mainColor: rgba(67, 67, 173, 0.529);
+:root {
+    --mainColor: rgba(67, 67, 173, 0.529);
 }
+
 body {
     font-family: Arial, sans-serif;
     background-color: rgb(235, 233, 233);
@@ -14,83 +15,92 @@ body {
     padding-top: 15px;
 }
 
-#input{
-  border-radius: 15px ;
-  background-color: white;
-  width: 90%;
-  height: em;
-  padding: 20px;
-  margin: 50px;
-  overflow: auto;
+#input {
+    border-radius: 15px;
+    background-color: white;
+    width: 90%;
+    height: em;
+    padding: 20px;
+    margin: 50px;
+    overflow: auto;
 }
 
-.inputcell{
-  width: 40px;       
-  height: 10px;      
-  padding: 5px;     
+.inputcell {
+    width: 40px;
+    height: 10px;
+    padding: 5px;
 }
 
-#tableInput{
-  border-collapse: collapse;
-  table-layout: fixed;
-}
-#tableInput th,#tableInput td {
-  border: 1px solid black;
-  padding: 8px;
+#tableInput {
+    border-collapse: collapse;
+    table-layout: fixed;
 }
 
-#submit{
-  background-color: var(--mainColor) ;
-  border-radius: 5px ;
-  border: white;
-  width: 80px;
-  height: 40px;
+#tableInput th,
+#tableInput td {
+    border: 1px solid black;
+    padding: 8px;
 }
 
-#output{
-  border-radius: 15px ;
-  background-color: white;
-  width: 90%;
-  padding: 20px;
-  margin: 50px;
-  overflow-y: scroll;
+#submit {
+    background-color: var(--mainColor);
+    border-radius: 5px;
+    border: white;
+    width: 80px;
+    height: 40px;
 }
 
-#tableOutput th{
-  border: 1px solid black;
-  width: 30px;       
-  height: 35px;     
-  text-align: left;
-  white-space: nowrap;
+#output {
+    border-radius: 15px;
+    background-color: white;
+    width: 90%;
+    padding: 20px;
+    margin: 50px;
+    overflow-y: scroll;
 }
-#tableOutput td{
-  width: 30px;       
-  height: 35px;     
-  
-  white-space: nowrap;
+
+#tableOutput th {
+    border: 1px solid black;
+    width: 30px;
+    height: 35px;
+    text-align: left;
+    white-space: nowrap;
 }
-#tableOutput{
-  border-collapse: collapse;
-  overflow: auto;
+
+#tableOutput td {
+    width: 30px;
+    height: 35px;
+
+    white-space: nowrap;
 }
-#quantum{
-  width: 80px;
-  height: 10px;
-  padding: 5px;
-  display: none;
+
+#tableOutput {
+    border-collapse: collapse;
+    overflow: auto;
 }
-#timeCoutTable{
-  border-collapse: collapse;
-  table-layout: fixed;
+
+#quantum {
+    width: 80px;
+    height: 10px;
+    padding: 5px;
+    display: none;
 }
-#timeCoutTable th,#timeCoutTable td {
-  border: 1px solid black;
-  padding: 8px;
-  width: 100px;
-  height: 20px;
-  text-align: center;
+
+#timeCoutTable {
+    border-collapse: collapse;
+    table-layout: fixed;
 }
-.readyCell{
-  border: 1px solid black;
-  text-align: center;
+
+#timeCoutTable th,
+#timeCoutTable td {
+    border: 1px solid black;
+    padding: 8px;
+    width: 100px;
+    height: 20px;
+    text-align: center;
+}
+
+.readyCell {
+    border: 1px solid black;
+    text-align: center;
 }
