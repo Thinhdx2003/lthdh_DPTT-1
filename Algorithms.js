@@ -275,6 +275,144 @@ function printOutTimeCoutTable() {
     }
 }
 
+function FCFS(){
+    //Khởi tạo ready queue
+    let minArvTime = Math.min(...processes.map(process => process.arrivalTime));
+    pushReadyQueue(readyQueue, minArvTime, processesCopy);
+    //Khởi tạo thời gian hiện tại
+    currentTime = minArvTime;
+    //Thực hiện RR
+    while (readyQueue.length > 0 || waitingQueues.some(Element => Element !== null)) {
+        printOutReadyQueue();
+        if (readyQueue.length > 0) {
+            let rows = Outputtable.rows;
+            rows[1 + sumOfProcess * 2].cells[currentTime + 1].style.color = "red";
+            let process = readyQueue.shift();
+            let currentProcess = getProcessIndex(process);
+            perform_WaitingTime(process, currentProcess);
+            // Thực thi CPU
+            let cpuBursting = process.currentCpu;
+            runCPU(cpuBursting, currentProcess, process);
+            // Kiểm tra tiến trình đã hoàn thành hay chưa
+            if (checkCompletedProcess(process, currentProcess))
+                continue;
+            // Dưa I/O vào waiting queue
+            checkCurrentCPU_toPush(process, currentProcess);
+        } else {
+            //thực thi I/O khi readyQueue trống
+            if (readyQueue.length == 0) {
+                runIO();
+                currentTime++;
+                //Check queue chưa vào
+                if (processesCopy.length > 0)
+                    pushReadyQueue(readyQueue, currentTime, processesCopy);
+                printOutReadyQueue();
+            }
+        }
+    }
+}
+
+function SJF() {
+    //Khởi tạo ready queue
+    let minArvTime = Math.min(...processes.map(process => process.arrivalTime));
+    pushReadyQueue(readyQueue, minArvTime, processesCopy);
+    //Khởi tạo thời gian hiện tại
+    currentTime = minArvTime;
+    //Thực hiện RR
+    while (readyQueue.length > 0 || waitingQueues.some(Element => Element !== null)) {
+        printOutReadyQueue();
+        if (readyQueue.length > 0) {
+            //Lấy phần tử nhỏ nhất từ queue
+            let indexOfMin = readyQueue.findIndex(process => process.currentCpu == Math.min(...readyQueue.map(process => process.currentCpu)));
+            let rows = Outputtable.rows;
+            rows[indexOfMin+ 1 + sumOfProcess * 2].cells[currentTime + 1].style.color = "red";
+            let process = readyQueue[indexOfMin];
+            readyQueue.splice(indexOfMin,1);
+            let currentProcess = getProcessIndex(process);
+            perform_WaitingTime(process, currentProcess);
+            // Thực thi CPU
+            let cpuBursting = process.currentCpu;
+            runCPU(cpuBursting, currentProcess, process);
+            // Kiểm tra tiến trình đã hoàn thành hay chưa
+            if (checkCompletedProcess(process, currentProcess))
+                continue;
+            // Dưa I/O vào waiting queue
+            checkCurrentCPU_toPush(process, currentProcess);
+        } else {
+            //thực thi I/O khi readyQueue trống
+            if (readyQueue.length == 0) {
+                runIO();
+                currentTime++;
+                //Check queue chưa vào
+                if (processesCopy.length > 0)
+                    pushReadyQueue(readyQueue, currentTime, processesCopy);
+                printOutReadyQueue();
+            }
+        }
+    }
+}
+
+function SRTF() {
+    //Khởi tạo ready queue
+    let minArvTime = Math.min(...processes.map(process => process.arrivalTime));
+    pushReadyQueue(readyQueue, minArvTime, processesCopy);
+    //Khởi tạo thời gian hiện tại
+    currentTime = minArvTime;
+    //Thực hiện RR
+    while (readyQueue.length > 0 || waitingQueues.some(Element => Element !== null)) {
+        printOutReadyQueue();
+        if (readyQueue.length > 0) {
+            //Lấy phần tử nhỏ nhất từ queue
+            let indexOfMin = readyQueue.findIndex(process => process.currentCpu == Math.min(...readyQueue.map(process => process.currentCpu)));
+            let rows = Outputtable.rows;
+            rows[indexOfMin+ 1 + sumOfProcess * 2].cells[currentTime + 1].style.color = "red";
+            let process = readyQueue[indexOfMin];
+            readyQueue.splice(indexOfMin,1);
+            let currentProcess = getProcessIndex(process);
+            perform_WaitingTime(process, currentProcess);
+            // Thực thi CPU
+            let cpuBursting = process.currentCpu;
+            let outputProcessRow = Outputtable.rows[currentProcess];
+            for (let i = 1; i <= cpuBursting; i++) {
+                if (i == 1)
+                    outputProcessRow.cells[currentTime + 1].textContent = "|";
+                outputProcessRow.cells[currentTime + 1].textContent += "────";
+                process.currentCpu--;
+                //Kiểm tra tiến độ I/O của mỗi process qua mỗi lần Time tăng
+                runIO();
+                currentTime++;
+                //Check queue chưa vào
+                if (processesCopy.length > 0)
+                    pushReadyQueue(readyQueue, currentTime, processesCopy);
+                printOutReadyQueue();
+                //Ngừng thực hiện nếu phát hiện process có CPU nhỏ hơn trong queue
+                if(process.currentCpu > Math.min(process.currentCpu, Math.min(...readyQueue.map(process => process.currentCpu)))){
+                    outputProcessRow.cells[currentTime].textContent += "|";
+                    break;
+                }
+                if(i == cpuBursting){
+                    outputProcessRow.cells[currentTime].textContent += "|";
+                }
+            }
+            // Kiểm tra tiến trình đã hoàn thành hay chưa
+            if (checkCompletedProcess(process, currentProcess))
+                continue;
+            // Dưa I/O vào waiting queue
+            checkCurrentCPU_toPush(process, currentProcess);
+        } else {
+            //thực thi I/O khi readyQueue trống
+            if (readyQueue.length == 0) {
+                runIO();
+                currentTime++;
+                //Check queue chưa vào
+                if (processesCopy.length > 0)
+                    pushReadyQueue(readyQueue, currentTime, processesCopy);
+                printOutReadyQueue();
+            }
+        }
+    }
+}
+
 function roundRobin(timeQuantum) {
     //Khởi tạo ready queue
     let minArvTime = Math.min(...processes.map(process => process.arrivalTime));
@@ -320,6 +458,12 @@ algorithm.addEventListener("change", function () {
     const selectedValue = selectedOption.value;
     let q = document.getElementById("quantum");
     switch (selectedValue) {
+        case "1":
+            q.style.display = "none";
+            break;
+        case "2":
+            q.style.display = "none";
+            break;
         case "3":
             q.style.display = "none";
             break;
@@ -350,6 +494,15 @@ solveBtn.addEventListener('click', function () {
     const selectedOption = algorithm.options[algorithm.selectedIndex];
     const selectedValue = selectedOption.value;
     switch (selectedValue) {
+        case "1":
+            FCFS();
+            break;
+        case "2":
+            SJF();
+            break;
+        case "3":
+            SRTF();
+            break;
         case "4":
             const q = document.getElementById("quantum").value;
             roundRobin(q);

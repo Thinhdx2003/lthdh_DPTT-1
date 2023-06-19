@@ -101,3 +101,5 @@ removeTaskBtn.addEventListener("click",function(){
     }
     cellInARow--;
 });
+
+
